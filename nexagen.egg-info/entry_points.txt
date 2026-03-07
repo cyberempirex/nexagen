@@ -1,2 +1,0 @@
-[console_scripts]
-nexagen = nexagen.cli.app:main
