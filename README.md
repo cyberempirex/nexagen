@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/nexagen-logo.png" width="220" alt="Nexagen Logo"/>
+<img src="assets/nexagen-logo.png" width="100%" alt="Nexagen Logo">
 
 </div>
 
