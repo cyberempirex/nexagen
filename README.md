@@ -1,5 +1,3 @@
-<!-- SEO: brand name generator, startup naming tool, domain availability checker, Python CLI, trademark risk, phonetic analysis, platform handle checker, open source naming engine, CyberEmpireX, CEX-Nexagen -->
-
 <div align="center">
 
 <img src="assets/nexagen-logo.png" width="100%" alt="NEXAGEN — Platform Naming Intelligence Engine">
