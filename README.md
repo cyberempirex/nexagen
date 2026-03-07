@@ -3,7 +3,7 @@
 <img src="assets/logo.png" width="220">
 
 </div>
-```
+
 
 **Platform Naming Intelligence Engine**
 
