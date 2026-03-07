@@ -574,23 +574,6 @@ Tests run entirely offline. All network calls in `test_domains.py` are patched v
 
 ---
 
-## Module Stats
-
-| Layer | Files | Lines |
-|---|---|---|
-| `cli/` | 5 | ~3,465 |
-| `ui/` | 6 | ~3,394 |
-| `export/` | 5 | ~3,304 |
-| `utils/` | 5 | ~3,116 |
-| `engine/` | 6 | ~2,833 |
-| `analysis/` | 5 | ~2,482 |
-| `domains/` | 5 | ~2,460 |
-| `checks/` | 6 | ~2,146 |
-| `config/` | 3 | ~1,083 |
-| **Total** | **51** | **~27,000** |
-
----
-
 ## Credits
 
 **Developed by [CyberEmpireX](https://github.com/cyberempirex)**
