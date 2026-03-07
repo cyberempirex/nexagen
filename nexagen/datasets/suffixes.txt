@@ -1,0 +1,171 @@
+# NEXAGEN — Domain Suffix Dataset
+# Version  : 1.0
+# Format   : one suffix per line  (lowercase · no spaces · no punctuation)
+# Usage    : brandname + suffix.tld → domain
+#            e.g.  nexagen + hub  → nexagenhub.com
+#                  nexagen + ai   → nexagen.ai   (also used as TLD hint)
+# Rules    : real startup patterns only · no random words · max 10 chars
+#            no hype words (no: mega/super/ultra/extreme/amazing)
+# Count    : 120 suffixes across 14 categories
+# Location : nexagen/datasets/suffixes.txt
+# Used by  : DomainEngine.generate_variations() in nexagen.py
+# ─────────────────────────────────────────────────────────────────
+
+# ── Product Type ────────────────────────────────────────────────────────────
+app
+web
+site
+tool
+kit
+box
+bot
+sdk
+cli
+api
+lab
+hub
+
+# ── Company / Org Identity ──────────────────────────────────────────────────
+hq
+co
+inc
+io
+ltd
+corp
+group
+works
+team
+crew
+
+# ── Platform / Service ──────────────────────────────────────────────────────
+base
+core
+cloud
+net
+node
+grid
+stack
+layer
+edge
+wire
+
+# ── Space / Environment ─────────────────────────────────────────────────────
+space
+zone
+room
+desk
+spot
+deck
+pad
+ground
+field
+yard
+
+# ── Creation / Workshop ─────────────────────────────────────────────────────
+studio
+forge
+workshop
+atelier
+factory
+craft
+shop
+mill
+
+# ── Knowledge / Content ─────────────────────────────────────────────────────
+docs
+wiki
+guide
+book
+notes
+pages
+index
+library
+vault
+
+# ── Technology / AI ─────────────────────────────────────────────────────────
+ai
+ml
+tech
+dev
+data
+ops
+sys
+pro
+plus
+fx
+ix
+rx
+
+# ── Growth / Scaling ────────────────────────────────────────────────────────
+up
+go
+run
+now
+live
+ready
+fast
+
+# ── Community / Social ──────────────────────────────────────────────────────
+connect
+network
+circle
+club
+social
+forum
+community
+tribe
+guild
+
+# ── Organic / Natural ───────────────────────────────────────────────────────
+garden
+nest
+den
+burrow
+path
+trail
+bridge
+haven
+sanctuary
+
+# ── Premium / Luxury ────────────────────────────────────────────────────────
+prime
+elite
+premium
+select
+gold
+apex
+peak
+zen
+
+# ── Security / Trust ────────────────────────────────────────────────────────
+secure
+safe
+shield
+guard
+lock
+key
+trust
+verify
+
+# ── Open / Accessible ───────────────────────────────────────────────────────
+open
+free
+public
+share
+exchange
+market
+portal
+
+# ── Compound Patterns ───────────────────────────────────────────────────────
+central
+global
+digital
+smart
+flow
+stream
+pulse
+wave
+spark
+vision
+
+# ── END ────────────────────────────────────────────────────────────────────

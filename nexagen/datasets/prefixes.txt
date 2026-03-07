@@ -1,0 +1,94 @@
+# NEXAGEN — Domain Prefix Dataset
+# Version  : 1.0
+# Format   : one prefix per line  (lowercase · no spaces · no punctuation)
+# Usage    : prefix + brandname.tld → domain
+#            e.g.  get + nexagen → getnexagen.com
+#                  my  + nexagen → mynexagen.io
+# Rules    : action words only · max 6 chars preferred · no hype words
+#            (no: super/mega/ultra/best/cool — unprofessional in domains)
+# Count    : 63 prefixes across 9 categories
+# Location : nexagen/datasets/prefixes.txt
+# Used by  : DomainEngine.generate_variations() in nexagen.py
+# ─────────────────────────────────────────────────────────────────
+
+# ── Core Startup Prefixes (highest real-world usage) ───────────────────────
+get
+try
+use
+join
+start
+build
+launch
+create
+make
+run
+open
+go
+
+# ── Action / Discovery ──────────────────────────────────────────────────────
+find
+discover
+explore
+choose
+pick
+grab
+claim
+meet
+see
+browse
+search
+check
+
+# ── Access / Entry ──────────────────────────────────────────────────────────
+access
+enter
+unlock
+activate
+connect
+reach
+sign
+install
+
+# ── Security / Trust ────────────────────────────────────────────────────────
+secure
+protect
+trust
+
+# ── Developer / DevOps ──────────────────────────────────────────────────────
+deploy
+ship
+develop
+test
+release
+
+# ── Personalization / Ownership ─────────────────────────────────────────────
+my
+getmy
+joinmy
+startmy
+trymy
+usemy
+
+# ── Community / Collaboration ───────────────────────────────────────────────
+with
+by
+via
+for
+team
+
+# ── Invitation / Soft ───────────────────────────────────────────────────────
+hey
+hi
+say
+ask
+call
+
+# ── Quality Modifiers ───────────────────────────────────────────────────────
+quick
+smart
+fast
+easy
+simple
+instant
+
+# ── END ────────────────────────────────────────────────────────────────────

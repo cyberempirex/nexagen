@@ -1,0 +1,63 @@
+# NEXAGEN — Top-Level Domain (TLD) Dataset
+# Version  : 1.0
+# Format   : one TLD per line  (no leading dot · lowercase)
+# Usage    : brandname + . + tld → domain
+#            e.g.  nexagen.com  nexagen.io  nexagen.ai
+# Tiers    : 1=Universal · 2=Tech · 3=Industry · 4=General
+#            5=Community · 6=Modern Alternatives
+# Location : nexagen/datasets/tlds.txt
+# ─────────────────────────────────────────────────────────────────
+
+# ── Tier 1 — Universal (highest brand credibility) ─────────────────────────
+com
+io
+co
+ai
+
+# ── Tier 2 — Tech & Developer (strong in startup/dev communities) ───────────
+dev
+app
+tech
+cloud
+build
+tools
+run
+systems
+
+# ── Tier 3 — Industry Specific ──────────────────────────────────────────────
+health
+finance
+studio
+design
+agency
+
+# ── Tier 4 — General Purpose ────────────────────────────────────────────────
+net
+org
+online
+site
+digital
+works
+world
+space
+center
+group
+
+# ── Tier 5 — Community and Product ─────────────────────────────────────────
+software
+platform
+solutions
+services
+network
+hub
+labs
+link
+
+# ── Tier 6 — Modern Alternatives ────────────────────────────────────────────
+xyz
+me
+ly
+gg
+so
+
+# ── END  (40 TLDs) ──────────────────────────────────────────────────────
