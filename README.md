@@ -598,10 +598,9 @@ Tests run entirely offline. All network calls in `test_domains.py` are patched v
 CEX-Nexagen is part of the **CyberEmpireX (CEX)** ecosystem — a collection of practical cybersecurity and research tools built for professionals who prefer working from a terminal.
 
 ```
+Maintained by CyberEmpireX
 Tool     :  NEXAGEN v1.0.0
-Author   :  CEX-Nexagen
 Ecosystem:  CyberEmpireX (CEX)
-Contact  :  contact@cyberempirex.dev
 Repo     :  https://github.com/cyberempirex/nexagen
 Docs     :  https://github.com/cyberempirex/nexagen/wiki
 ```
