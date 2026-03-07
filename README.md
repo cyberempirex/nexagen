@@ -1,9 +1,8 @@
 <div align="center">
 
-<img src="assets/logo.png" width="220">
+<img src="assets/nexagen-logo.png" width="220" alt="Nexagen Logo"/>
 
 </div>
-
 
 **Platform Naming Intelligence Engine**
 
