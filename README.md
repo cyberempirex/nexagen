@@ -1,19 +1,44 @@
+<!-- SEO: brand name generator, startup naming tool, domain availability checker, Python CLI, trademark risk, phonetic analysis, platform handle checker, open source naming engine, CyberEmpireX, CEX-Nexagen -->
+
 <div align="center">
 
-<img src="assets/nexagen-logo.png" width="100%" alt="Nexagen Logo">
+<img src="assets/nexagen-logo.png" width="100%" alt="NEXAGEN — Platform Naming Intelligence Engine">
 
-</div>
+<br/>
 
 **Platform Naming Intelligence Engine**
 
+<br/>
+
+<!-- Row 1 — Core identity -->
 [![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
-[![Version](https://img.shields.io/badge/Version-v1.0.0-9b59b6?style=flat-square)](https://github.com/cyberempirex/nexagen)
-[![License](https://img.shields.io/badge/License-MIT-2ecc71?style=flat-square)](LICENSE)
+[![Version](https://img.shields.io/badge/Version-v1.0.0-9b59b6?style=flat-square&logo=github)](https://github.com/cyberempirex/nexagen/releases)
+[![License](https://img.shields.io/badge/License-MIT-2ecc71?style=flat-square&logo=opensourceinitiative&logoColor=white)](LICENSE)
+[![Open Source](https://img.shields.io/badge/Open_Source-Yes-brightgreen?style=flat-square&logo=github)](https://github.com/cyberempirex/nexagen)
+
+<!-- Row 2 — Project metrics -->
 [![Lines of Code](https://img.shields.io/badge/Lines_of_Code-27%2C000%2B-00d2d3?style=flat-square)](https://github.com/cyberempirex/nexagen)
 [![Modules](https://img.shields.io/badge/Modules-51_files-f39c12?style=flat-square)](https://github.com/cyberempirex/nexagen)
+[![Tests](https://img.shields.io/badge/Tests-427_cases-e74c3c?style=flat-square&logo=pytest&logoColor=white)](tests/)
+[![Docs](https://img.shields.io/badge/Docs-Wiki-3498db?style=flat-square&logo=readthedocs&logoColor=white)](https://github.com/cyberempirex/nexagen/wiki)
+
+<!-- Row 3 — Platform & community -->
+[![CLI Tool](https://img.shields.io/badge/Interface-CLI-1a1a2e?style=flat-square&logo=gnubash&logoColor=white)](https://github.com/cyberempirex/nexagen)
+[![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20macOS%20%7C%20Termux-0984e3?style=flat-square&logo=linux&logoColor=white)](https://github.com/cyberempirex/nexagen)
+[![Stars](https://img.shields.io/github/stars/cyberempirex/nexagen?style=flat-square&logo=github&color=f1c40f)](https://github.com/cyberempirex/nexagen/stargazers)
+[![Forks](https://img.shields.io/github/forks/cyberempirex/nexagen?style=flat-square&logo=github)](https://github.com/cyberempirex/nexagen/network)
+[![Issues](https://img.shields.io/github/issues/cyberempirex/nexagen?style=flat-square&logo=github)](https://github.com/cyberempirex/nexagen/issues)
+[![Last Commit](https://img.shields.io/github/last-commit/cyberempirex/nexagen?style=flat-square&logo=github)](https://github.com/cyberempirex/nexagen/commits/main)
+[![Repo Size](https://img.shields.io/github/repo-size/cyberempirex/nexagen?style=flat-square&logo=github)](https://github.com/cyberempirex/nexagen)
 [![CEX](https://img.shields.io/badge/CEX--Nexagen-CyberEmpireX-6c5ce7?style=flat-square)](https://github.com/cyberempirex)
 
+<br/>
+
 *Generate · Analyze · Validate · Discover*
+
+<br/>
+
+> ⭐ **If NEXAGEN saves you time, consider [starring the repo](https://github.com/cyberempirex/nexagen) — it helps others find it.**
 
 </div>
 
@@ -45,6 +70,7 @@ It was built for people who spend too much time staring at a blank domain search
 - [Environment Variables](#environment-variables)
 - [Project Structure](#project-structure)
 - [Running Tests](#running-tests)
+- [Module Stats](#module-stats)
 - [Credits](#credits)
 
 ---
@@ -579,6 +605,7 @@ Author   :  CEX-Nexagen
 Ecosystem:  CyberEmpireX (CEX)
 Contact  :  contact@cyberempirex.dev
 Repo     :  https://github.com/cyberempirex/nexagen
+Docs     :  https://github.com/cyberempirex/nexagen/wiki
 ```
 
 ---
@@ -587,6 +614,11 @@ Repo     :  https://github.com/cyberempirex/nexagen
 
 *NEXAGEN is provided as-is for research and creative use.*
 *Final responsibility for name selection rests with the user.*
+
+<br/>
+
+[![CEX](https://img.shields.io/badge/CEX--Nexagen-CyberEmpireX-6c5ce7?style=flat-square)](https://github.com/cyberempirex)
+[![Stars](https://img.shields.io/github/stars/cyberempirex/nexagen?style=flat-square&logo=github&color=f1c40f)](https://github.com/cyberempirex/nexagen/stargazers)
 
 **CEX-Nexagen · CyberEmpireX**
 
