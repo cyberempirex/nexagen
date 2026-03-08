@@ -9,7 +9,7 @@
 <br/>
 
 <!-- Row 1 — Core identity -->
-[![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
+[![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![Version](https://img.shields.io/badge/Version-v1.0.0-9b59b6?style=flat-square&logo=github)](https://github.com/cyberempirex/nexagen/releases)
 [![License](https://img.shields.io/badge/License-MIT-2ecc71?style=flat-square&logo=opensourceinitiative&logoColor=white)](LICENSE)
 [![Open Source](https://img.shields.io/badge/Open_Source-Yes-brightgreen?style=flat-square&logo=github)](https://github.com/cyberempirex/nexagen)
@@ -96,21 +96,21 @@ It was built for people who spend too much time staring at a blank domain search
 
 ```mermaid
 flowchart TD
-    A[User Input\nKeywords] --> B[KeywordEngine\nclean · validate · score]
-    B --> C[SynonymEngine\nexpand · profile-vocab · filter by style]
-    C --> D[PatternEngine\n10 linguistic strategies]
-    C --> E[MutationEngine\n12 char-level mutations]
-    D --> F[Candidate Pool\nmerge · deduplicate]
+    A["User Input\nKeywords"] --> B["KeywordEngine\nclean · validate · score"]
+    B --> C["SynonymEngine\nexpand · profile-vocab · filter by style"]
+    C --> D["PatternEngine\n10 linguistic strategies"]
+    C --> E["MutationEngine\n12 char-level mutations"]
+    D --> F["Candidate Pool\nmerge · deduplicate"]
     E --> F
-    F --> G[BrandScorer\npronounce · memory · uniqueness · length]
-    G --> H[Ranked NameResults\nsorted by composite score]
-    H --> I{Mode}
-    I -->|Interactive| J[Rich Terminal UI\nanimated reveal · tables]
-    I -->|Export| K[JSON / CSV / Markdown\nreport_builder]
-    H --> L[DomainGenerator\nplans · TLD strategy]
-    L --> M[DomainChecker\nRDAP · batch · cache]
-    H --> N[PlatformDispatcher\nGitHub · PyPI · npm\nDocker · HuggingFace]
-    M --> O[Startup Report]
+    F --> G["BrandScorer\npronounce · memory · uniqueness · length"]
+    G --> H["Ranked NameResults\nsorted by composite score"]
+    H --> I{"Mode"}
+    I -->|Interactive| J["Rich Terminal UI\nanimated reveal · tables"]
+    I -->|Export| K["JSON / CSV / Markdown\nreport_builder"]
+    H --> L["DomainGenerator\nplans · TLD strategy"]
+    L --> M["DomainChecker\nRDAP · batch · cache"]
+    H --> N["PlatformDispatcher\nGitHub · PyPI · npm\nDocker · HuggingFace"]
+    M --> O["Startup Report"]
     N --> O
 
     style A fill:#9b59b6,color:#fff
@@ -125,8 +125,11 @@ flowchart TD
 
 ### Requirements
 
-- Python 3.11 or later
-- `rich` (terminal UI)
+- Python 3.9 or later
+- `rich >= 13.0` (terminal UI)
+- `typer >= 0.9` (CLI framework)
+- `httpx >= 0.27` (HTTP client)
+- `rapidfuzz >= 3.0` (fuzzy string matching)
 - Internet connection for domain and platform availability checks (optional — checks can be disabled)
 
 ### From Source
@@ -142,7 +145,7 @@ pip install -e .
 ```bash
 git clone https://github.com/cyberempirex/nexagen
 cd nexagen
-pip install rich
+pip install rich typer httpx rapidfuzz
 python -m nexagen.cli.app
 ```
 
@@ -195,8 +198,8 @@ nexagen [OPTIONS]
 | `--no-anim` | — | flag | off | Disable all Rich animations |
 | `--no-clear` | — | flag | off | Skip screen clear on startup |
 | `--no-update-check` | — | flag | off | Skip GitHub update check |
-| `--profile` | `-p` | string | from settings | Industry profile (see [Profiles](#profiles--style-modes)) |
-| `--style` | — | string | from settings | Naming style mode (see [Style Modes](#profiles--style-modes)) |
+| `--profile` | `-p` | string | from settings | Industry profile — see [Profiles](#profiles--style-modes) |
+| `--style` | — | string | from settings | Naming style mode — see [Style Modes](#profiles--style-modes) |
 | `--count` | `-n` | int | `20` | Number of names to generate (max 200) |
 | `--generate` | `-g` | `KEYWORD...` | — | Generate immediately and exit |
 
@@ -235,70 +238,89 @@ When launched without `--generate`, NEXAGEN opens an interactive menu:
 Every run — interactive or headless — passes through the same five stages:
 
 ```
-Stage 1  KeywordEngine
-         ─────────────────────────────────────────────────────
-         Normalise → validate → score → profile-boost
-         Rejects: too-short tokens, digits-only, stopwords
-         Output: KeywordSet with final[], scored[], warnings[]
+Stage 1 — KeywordEngine
+  Normalise → validate → score → profile-boost
+  Rejects: too-short tokens, digits-only, stopwords
+  Output: KeywordSet with final[], scored[], warnings[]
 
-Stage 2  SynonymEngine
-         ─────────────────────────────────────────────────────
-         Synonym graph expansion (depth-1) + profile vocabulary
-         Phonetic deduplication via Soundex + Metaphone
-         Output: ExpansionResult — up to 80 scored seed words
+Stage 2 — SynonymEngine
+  Synonym graph expansion (depth-1) + profile vocabulary injection
+  Phonetic deduplication via Soundex + Metaphone
+  Output: ExpansionResult — up to 80 scored seed words
 
-Stage 3  PatternEngine   (10 strategies)
-         ─────────────────────────────────────────────────────
-         direct · prefix · suffix · compound · blend
-         mutation · power_ending · soft_ending · truncate · acronym
-         Output: GenerationResult — up to 500 candidates
+Stage 3 — PatternEngine  (10 strategies)
+  Applies macro-level combination strategies to the seed pool
+  Each candidate carries a strategy tag for filtering and analysis
+  Output: list[Candidate] — name + strategy + source seeds
 
-Stage 4  MutationEngine  (12 strategies)
-         ─────────────────────────────────────────────────────
-         vowel_drop · vowel_replace · consonant_swap · phoneme_sub
-         power_ending · soft_ending · letter_double · syllable_drop
-         initial_shift · x_infusion · reverse_blend · compress
-         Active set is gated by the active StyleMode
-         Output: MutationResult — up to 300 additional variants
+Stage 4 — MutationEngine  (12 strategies)
+  Applies character- and phoneme-level mutations to individual seeds
+  Works deeper than PatternEngine — modifies within words, not between them
+  Output: list[MutatedCandidate] — name + strategy + fitness flag
 
-Stage 5  BrandScorer
-         ─────────────────────────────────────────────────────
-         Merge both pools → Levenshtein dedup (threshold 2)
-         Score every candidate → sort → trim to cfg.count
-         Output: list[NameResult] sorted by composite score DESC
+Stage 5 — BrandScorer
+  Merges and deduplicates all candidates from stages 3 and 4
+  Scores each on 4 weighted dimensions (see Scoring System)
+  Applies quality gate: names scoring below 40 are dropped
+  Output: list[NameResult] sorted by composite score descending
 ```
+
+### Pattern Strategies
+
+| # | Strategy | Example |
+|---|---|---|
+| 1 | DIRECT | Seeds that already meet length requirements |
+| 2 | PREFIX | `get` + seed → `getdata`, `open` + seed → `openflow` |
+| 3 | SUFFIX | seed + `hub` → `datahub`, seed + `base` → `flowbase` |
+| 4 | COMPOUND | seed + seed → `cloudstream` |
+| 5 | BLEND | Portmanteau of two seeds → `nexagen` |
+| 6 | MUTATION | Vowel-drop / consonant swap → `datx`, `flwio` |
+| 7 | POWER_ENDING | Vowel-stripped seed + power suffix → `-ex`, `-ix`, `-on` |
+| 8 | SOFT_ENDING | seed + soft suffix → `-ly`, `-fy`, `-io`, `-al`, `-ara` |
+| 9 | TRUNCATE | Shortened form → `datacenter` → `datacen` |
+| 10 | ACRONYM | Initials of multi-word seeds → `nexio` |
+
+### Mutation Strategies
+
+| # | Strategy | Example |
+|---|---|---|
+| 1 | VOWEL_DROP | `data` → `dta` |
+| 2 | VOWEL_REPLACE | `nexus` → `noxus` |
+| 3 | CONSONANT_SWAP | `kore` → `core` |
+| 4 | PHONEME_SUB | `phone` → `fone` |
+| 5 | POWER_ENDING | `cloud` → `cloudex` |
+| 6 | SOFT_ENDING | `data` → `datalia` |
+| 7 | LETTER_DOUBLE | `nova` → `novva` |
+| 8 | SYLLABLE_DROP | Remove weakest syllable from long words |
+| 9 | INITIAL_SHIFT | `base` → `vase` / `dase` |
+| 10 | X_INFUSION | `core` → `xcore` / `corex` |
+| 11 | REVERSE_BLEND | `data` + `flow` → `taflow` |
+| 12 | COMPRESS | `cloud` → `clud` |
 
 ---
 
 ## Scoring System
 
-Each name is scored across four independent dimensions then combined into a single 0–100 composite.
+Each candidate is scored on four dimensions and combined into a single composite score from 0 to 100.
 
 | Dimension | Weight | What It Measures |
 |---|---|---|
-| **Pronounceability** | 30% | Vowel ratio, consonant run length, alternation score, forbidden phoneme sequences, syllable count |
-| **Memorability** | 30% | Length in ideal range (4–8 chars), strong opening consonant, ends on vowel, alliteration, syllable rhythm |
-| **Uniqueness** | 20% | Distance from common English words, blacklist proximity, pool distance, phonetic distance, visual novelty |
-| **Length Fitness** | 20% | Penalises names shorter than 4 or longer than 8 chars; hard clamp at 2–20 |
+| Pronounceability | 30% | Vowel-consonant balance, alternation, syllable rhythm, cluster complexity |
+| Memorability | 30% | Length fitness, phonetic uniqueness, syllable count, pattern regularity |
+| Uniqueness | 20% | Distance from common words, blacklist, and known trademarks |
+| Length Fitness | 20% | Penalty for names outside the ideal 4–8 character range |
 
-**Tier thresholds:**
+### Score Tiers
 
-| Score | Tier | Indicator |
+| Tier | Score Range | Indicator |
 |---|---|---|
-| 90–100 | `PREMIUM` | ◆ |
-| 75–89 | `STRONG` | ▲ |
-| 60–74 | `DECENT` | ● |
-| 40–59 | `WEAK` | ▼ |
-| 0–39 | `POOR` | ✕ |
+| PREMIUM | 90 – 100 | ◆ |
+| STRONG | 75 – 89 | ▲ |
+| DECENT | 60 – 74 | ● |
+| WEAK | 40 – 59 | ▼ |
+| POOR | 0 – 39 | ✕ — filtered out before display |
 
-**Trademark risk levels** (Damerau-Levenshtein distance against brand blacklist):
-
-| Distance | Risk |
-|---|---|
-| 0 or ≤ 1 | `HIGH` |
-| 2 | `MEDIUM` |
-| 3 | `LOW` |
-| > 3 | `NONE` |
+Score weights are configurable in `~/.nexagen/settings.toml` under `[score_weights]`.
 
 ---
 
@@ -306,140 +328,176 @@ Each name is scored across four independent dimensions then combined into a sing
 
 ### Profiles
 
-Set with `--profile` or inside settings. Biases vocabulary selection, TLD priority, and pattern weights toward the chosen industry.
+Profiles bias the synonym vocabulary, preferred TLDs, pattern weights, and blacklist thresholds toward a specific industry vertical.
 
-| Profile | Best For |
-|---|---|
-| `tech` | Dev tools, SaaS, infrastructure, cloud platforms |
-| `ai` | ML models, AI agents, data pipelines, LLM products |
-| `security` | Cybersecurity tools, pentest utilities, threat intelligence |
-| `finance` | Fintech, payment rails, trading platforms, DeFi |
-| `health` | MedTech, wellness apps, clinical platforms |
-| `social` | Communities, creator tools, messaging platforms |
-| `education` | EdTech, learning platforms, research tools |
-| `document` | Productivity, note-taking, document management |
-| `generic` | General purpose — no domain bias |
+| Profile | Flag value | Focus |
+|---|---|---|
+| Generic | `generic` | Balanced defaults — no bias |
+| Tech | `tech` | Developer tools, infrastructure |
+| AI | `ai` | Machine learning, neural, model |
+| Security | `security` | Cyber, defence, zero-trust |
+| Finance | `finance` | Fintech, ledger, payments |
+| Health | `health` | Medtech, wellness, clinical |
+| Social | `social` | Community, network, connect |
+| Education | `education` | Learning, courses, knowledge |
+| Document | `document` | Docs, notes, productivity |
+
+```bash
+nexagen --generate payments ledger --profile finance
+nexagen -g model inference serving -p ai
+```
 
 ### Style Modes
 
-Set with `--style`. Controls which mutation strategies and pattern weights are active.
+Style modes control which pattern and mutation strategies are enabled and what length preferences are applied.
 
-| Style | Character | Active Mutations |
+| Style | Flag value | Character |
 |---|---|---|
-| `minimal` | Clean, short, modern | vowel_drop · compress · syllable_drop |
-| `futuristic` | Edgy, tech-forward | power_ending · x_infusion · phoneme_sub · consonant_swap |
-| `aggressive` | Bold, sharp | power_ending · consonant_swap · initial_shift · letter_double |
-| `soft` | Friendly, approachable | soft_ending · vowel_replace · vowel_drop |
-| `technical` | Precise, systematic | phoneme_sub · compress · power_ending · syllable_drop |
-| `luxury` | Premium, refined | vowel_replace · soft_ending · compress |
+| Minimal | `minimal` | Short, clean names (4–6 chars); DIRECT, PREFIX, SUFFIX, TRUNCATE |
+| Futuristic | `futuristic` | Sci-fi feel; POWER_ENDING, X_INFUSION, PHONEME_SUB, BLEND |
+| Aggressive | `aggressive` | Hard, strong names; COMPOUND, POWER_ENDING, INITIAL_SHIFT |
+| Soft | `soft` | Vowel endings, approachable; SOFT_ENDING, VOWEL_REPLACE, BLEND |
+| Technical | `technical` | Precise, compound; PREFIX, SUFFIX, COMPOUND, ACRONYM |
+| Luxury | `luxury` | Short, premium; TRUNCATE, BLEND, POWER_ENDING, VOWEL_REPLACE |
+
+```bash
+nexagen --generate cloud deploy --style futuristic
+nexagen -g health wellness --profile health --style soft
+```
 
 ---
 
 ## Domain Intelligence
 
-### TLD Scoring
+Domain checks use RDAP (the modern replacement for WHOIS) via `rdap.org`. Results are cached locally in `~/.nexagen/cache/domains/` with a 1-hour TTL to avoid redundant network calls.
 
-40+ TLDs are scored from 0–100 based on recognition, trust, SEO friendliness, and registrar availability. Scores are further adjusted per profile (e.g., `.ai` ranks higher under the `ai` profile).
+### TLD Coverage and Scores
 
-| TLD | Score | Tier |
+TLDs are scored from 1–100 based on perceived brand value and recognition. The score influences how domain results are sorted and recommended.
+
+| Score | TLDs |
+|---|---|
+| 100 | `.com` |
+| 80–85 | `.io`, `.ai` |
+| 70–79 | `.co`, `.dev` |
+| 60–69 | `.app`, `.tech`, `.cloud` |
+| 50–59 | `.build`, `.hub`, `.labs`, `.net` |
+| 40–49 | `.tools`, `.run`, `.studio`, `.org`, `.online`, `.health`, `.finance` |
+| 20–39 | `.site`, `.digital`, `.works`, `.world`, `.space`, `.xyz`, `.me`, `.ly`, `.gg`, `.so` |
+
+Full list of checked TLDs: `com io ai co dev app tech cloud build tools run systems net org online site digital works world space center group software platform solutions services network hub labs link studio agency design health finance xyz me ly gg so`
+
+### Domain Variants
+
+For each brand name, NEXAGEN generates multiple domain variants before checking:
+
+- Bare name across all preferred TLDs: `nexagen.io`, `nexagen.ai`, etc.
+- Prefix variants: `getnexagen.com`, `trynexagen.com`, `usenexagen.com`
+- Suffix variants: `nexagenhq.com`, `nexagenlabs.io`, `nexagenapp.co`
+
+### Availability Status
+
+| Icon | Status | Meaning |
 |---|---|---|
-| `.com` | 100 | PREMIUM |
-| `.io` | 85 | PREMIUM |
-| `.ai` | 82 | PREMIUM |
-| `.co` | 78 | STRONG |
-| `.dev` | 74 | STRONG |
-| `.app` | 70 | STRONG |
-| `.tech` | 68 | STRONG |
-| `.cloud` | 65 | STANDARD |
-| `.build` | 62 | STANDARD |
-| `.tools` | 60 | STANDARD |
-| `.net` | 54 | STANDARD |
-| `.xyz` | 32 | NICHE |
+| ✔ | FREE | Domain is available to register |
+| ✘ | TAKEN | Domain is registered (RDAP body confirmed) |
+| ? | UNKNOWN | RDAP returned an ambiguous response — re-check manually |
 
-### Variant Generation
-
-For each brand name, NEXAGEN generates:
-
-1. **Exact** — `brand.com`, `brand.io`, `brand.ai`, …
-2. **Prefix** — `getbrand.io`, `usebrand.dev`, `trybrand.app`, …
-3. **Suffix** — `brandhub.io`, `brandlab.dev`, `brandapp.co`, …
-
-All variants are checked via RDAP (rdap.org) with an in-process cache (TTL: 1 hour by default) and 12-worker concurrent batch checking.
-
-### Portfolio Recommendations
-
-The `TLDStrategy` module provides `must-have`, `nice-to-have`, and `optional` TLD portfolios per profile — so you know which registrations actually matter beyond `.com`.
+> **Note:** TAKEN requires both an HTTP 200 response **and** a valid RDAP domain object in the body. Some registries incorrectly return HTTP 200 for unregistered domains. NEXAGEN validates the response body against RFC 9083 before declaring a domain TAKEN — missing `objectClassName`, `status`, or domain identifier fields will produce UNKNOWN instead of a false positive.
 
 ---
 
 ## Platform Checks
 
-Availability is checked concurrently across five platforms with a configurable timeout (default: 8 seconds per check, 12 workers).
+Handle availability is checked concurrently across five platforms using their public APIs.
 
-| Platform | What's Checked | Toggle |
+| Platform | API Endpoint | What Is Checked |
 |---|---|---|
-| GitHub | Username / organisation availability | `check_github` |
-| PyPI | Package name availability | `check_pypi` |
-| npm | Package name availability | `check_npm` |
-| Docker Hub | Namespace availability | `check_docker` |
-| Hugging Face | Model / org namespace | `check_huggingface` |
+| GitHub | `api.github.com/users/{handle}` | User or organisation name |
+| PyPI | `pypi.org/pypi/{package}/json` | Package name |
+| npm | `registry.npmjs.org/{package}` | Package name |
+| Docker Hub | `hub.docker.com/v2/users/{name}` | User or organisation name |
+| Hugging Face | `huggingface.co/api/users/{name}` | User or organisation name |
 
-Each check returns `free`, `taken`, or `unknown`. Results are included in the startup report and displayed in a Rich availability table.
+All five checks run in parallel. Results are included in the domain table output and in all export formats.
+
+Platform checks can be toggled individually in `~/.nexagen/settings.toml`:
+
+```toml
+check_github      = true
+check_pypi        = true
+check_npm         = true
+check_docker      = true
+check_huggingface = true
+```
 
 ---
 
 ## Export Formats
 
-Results can be exported individually or all at once (`--export all` from within the CLI, or via `cmd_export()`).
+NEXAGEN can write results to `~/.nexagen/exports/` in three formats.
 
+| Format | Flag | File | Contents |
+|---|---|---|---|
+| JSON | `json` | `nexagen_YYYYMMDD_HHMMSS.json` | Full structured report with all scores, domains, platforms, and metadata |
+| CSV | `csv` | `nexagen_YYYYMMDD_HHMMSS.csv` | Excel-compatible flat table — one row per name candidate |
+| Markdown | `markdown` | `nexagen_YYYYMMDD_HHMMSS.md` | Human-readable report with tables and domain/platform sections |
+| All | `all` | All three files | All formats written simultaneously |
+
+Export format is set in settings or triggered from the interactive menu after any generation run.
+
+```toml
+# ~/.nexagen/settings.toml
+export_format = "all"     # json | csv | markdown | all
+auto_export   = false     # write automatically after every run
 ```
-~/.nexagen/exports/
-  nexagen_export_20250315_142301.json
-  nexagen_export_20250315_142301.csv
-  nexagen_export_20250315_142301.md
-```
-
-### JSON
-
-Structured envelope with `nexagen_export`, `version`, `author`, `exported_at`, `count`, and a `data` array. Report exports include named sections: `metadata`, `names`, `domains`, `platforms`.
-
-### CSV
-
-Multi-section CSV with a metadata header. Supports UTF-8 BOM for Excel compatibility. Each data type (names, analysis, domains, platforms) has its own column schema. Nested fields (domains dict, keywords list) are flattened to readable single-cell strings.
-
-### Markdown
-
-GitHub-Flavored Markdown with pipe tables, Unicode score bars (`▓░`), tier emoji, and availability icons (✔/✘). Report documents include H1 project title, section headers, session stats, and a full NEXAGEN attribution footer. Ready to paste into a project wiki or `NAMING.md`.
 
 ---
 
 ## Configuration
 
-Settings are stored at `~/.nexagen/settings.toml` and created automatically on first run. They can be edited directly or updated programmatically.
-
-**Key settings:**
+Settings are stored in `~/.nexagen/settings.toml` and created automatically on first run. All values have sensible defaults — the file only needs to exist if you want to change something.
 
 ```toml
-profile          = "generic"     # tech · ai · security · finance · health · social · education · document · generic
-style_mode       = "minimal"     # minimal · futuristic · aggressive · soft · technical · luxury
-count            = 20            # names to generate per run (5–200)
-min_len          = 4             # minimum name length
-max_len          = 8             # maximum name length (ideal range — hard max is 20)
-use_prefixes     = true
-use_suffixes     = true
-use_synonyms     = true
-do_domain_checks = true
-do_handle_checks = true
-check_workers    = 12
-check_timeout    = 8.0
-preferred_tlds   = ["com", "io", "ai", "co", "dev"]
-color_theme      = "cyberpunk"   # cyberpunk · light · mono
-animations       = true
-```
+# Generation
+profile      = "generic"    # tech | ai | security | finance | health | social | education | document | generic
+style_mode   = "minimal"    # minimal | futuristic | aggressive | soft | technical | luxury
+count        = 20           # default names to generate (max 200)
+min_len      = 4            # minimum name length
+max_len      = 8            # maximum name length
+use_suffixes = true
+use_prefixes = true
+use_synonyms = true
 
-**Score weights** (must sum to 1.0):
+# Domain checks
+do_domain_checks  = true
+do_handle_checks  = true
+check_workers     = 12      # parallel workers
+check_timeout     = 8.0     # seconds per request
+preferred_tlds    = ["com", "io", "ai", "co", "dev"]
 
-```toml
+# Platform checks
+check_github      = true
+check_pypi        = true
+check_npm         = true
+check_docker      = true
+check_huggingface = true
+
+# Display
+color_theme     = "cyberpunk"   # cyberpunk | light | mono
+animations      = true
+table_row_limit = 30
+
+# Export
+export_format = "json"          # json | csv | markdown | all
+auto_export   = false
+export_dir    = "~/.nexagen/exports"
+
+# Cache
+cache_enabled     = true
+cache_ttl_seconds = 3600
+
+# Score weights  (must sum to 1.0)
 [score_weights]
 pronounce    = 0.30
 memorability = 0.30
@@ -451,17 +509,21 @@ length_fit   = 0.20
 
 ## Environment Variables
 
-All settings can be overridden at runtime via environment variables. Useful for CI pipelines, Docker runs, or quick one-off overrides without touching the config file.
+Environment variables override the corresponding settings file values.
 
-| Variable | Maps To | Example |
-|---|---|---|
-| `NEXAGEN_PROFILE` | `cfg.profile` | `NEXAGEN_PROFILE=ai` |
-| `NEXAGEN_STYLE` | `cfg.style_mode` | `NEXAGEN_STYLE=futuristic` |
-| `NEXAGEN_COUNT` | `cfg.count` | `NEXAGEN_COUNT=50` |
-| `NEXAGEN_NO_CHECKS` | Disable domain + platform checks | `NEXAGEN_NO_CHECKS=1` |
-| `NEXAGEN_NO_ANIM` | Disable animations | `NEXAGEN_NO_ANIM=1` |
-| `NEXAGEN_EXPORT_DIR` | `cfg.export_dir` | `NEXAGEN_EXPORT_DIR=/tmp/exports` |
-| `NEXAGEN_LOG_LEVEL` | `cfg.log_level` | `NEXAGEN_LOG_LEVEL=DEBUG` |
+| Variable | Type | Default | Description |
+|---|---|---|---|
+| `NEXAGEN_PROFILE` | string | `generic` | Default industry profile |
+| `NEXAGEN_STYLE` | string | `minimal` | Default style mode |
+| `NEXAGEN_COUNT` | int | `20` | Default generation count |
+| `NEXAGEN_NO_ANIM` | `0`/`1` | `0` | Disable animations globally |
+| `NEXAGEN_NO_CLEAR` | `0`/`1` | `0` | Disable screen clear on startup |
+| `NEXAGEN_NO_DOMAIN` | `0`/`1` | `0` | Disable domain checks |
+| `NEXAGEN_NO_HANDLE` | `0`/`1` | `0` | Disable platform handle checks |
+| `NEXAGEN_EXPORT_DIR` | path | `~/.nexagen/exports` | Export output directory |
+| `NEXAGEN_CACHE_DIR` | path | `~/.nexagen/cache` | Cache directory |
+| `NEXAGEN_LOG_LEVEL` | string | `WARNING` | Logging level: `DEBUG`, `INFO`, `WARNING`, `ERROR` |
+| `NEXAGEN_THEME` | string | `cyberpunk` | UI colour theme |
 
 ---
 
@@ -469,83 +531,76 @@ All settings can be overridden at runtime via environment variables. Useful for 
 
 ```
 nexagen/
-│
-├── cli/                    Application entry point and command routing
-│   ├── app.py              main() · NexagenApp · argparse CLI flags
-│   ├── commands.py         cmd_generate_names · cmd_analyze_brand
-│   │                       cmd_domain_suggestions · cmd_startup_report · cmd_export
-│   ├── menu.py             Interactive menu dispatch loop
-│   └── help.py             Help text and usage examples
-│
-├── engine/                 Name generation pipeline
-│   ├── keyword_engine.py   Tokenise · validate · score · KeywordSet
-│   ├── synonym_engine.py   Graph expansion · profile vocab · ExpansionResult
-│   ├── pattern_engine.py   10 linguistic strategies · GenerationResult
-│   ├── mutation_engine.py  12 char-level mutations · MutationResult
-│   └── name_generator.py   5-stage orchestrator · NameGenerator
-│
-├── analysis/               Scoring and analysis layer
-│   ├── brand_score.py      BrandScorer · ScoreResult · composite_score()
-│   ├── phonetic_analysis.py 9-dimension PhoneticReport · analyse_phonetics()
-│   ├── collision_detection.py CollisionReport · 5 collision signals
-│   └── uniqueness_score.py UniquenessReport · 5-axis uniqueness scoring
-│
-├── domains/                Domain intelligence layer
-│   ├── domain_generator.py DomainPlan generation · prefix/suffix variants
-│   ├── domain_checker.py   RDAP lookup · batch checking · cache
-│   ├── domain_ranker.py    Scoring · ranking · filtering · DomainSummary
-│   └── tld_strategy.py     TLDTier · TLDStrategy · portfolio recommendations
-│
-├── checks/                 Platform availability checks
-│   ├── github_check.py     GitHub username/org availability
-│   ├── pypi_check.py       PyPI package name availability
-│   ├── npm_check.py        npm package name availability
-│   ├── docker_check.py     Docker Hub namespace availability
-│   └── platform_dispatcher.py Concurrent batch check orchestrator
-│
-├── export/                 Export engine
-│   ├── json_export.py      Structured JSON export · JsonResult
-│   ├── csv_export.py       Multi-section CSV · Excel-compatible · CsvResult
-│   ├── markdown_export.py  GFM tables · score bars · MarkdownResult
-│   └── report_builder.py   ReportBuilder · ExportManifest · multi-format output
-│
-├── ui/                     Terminal UI layer (Rich)
-│   ├── theme.py            ThemePalette · cyberpunk/light/mono · apply_theme()
-│   ├── banner.py           Animated banner · section dividers · status helpers
-│   ├── tables.py           NameResult · AnalysisData · DomainEntry · print_*
-│   ├── animations.py       Boot sequence · spinners · name reveal
-│   └── progress.py         MultiStepProgress · WorkflowStep · track()
-│
-├── utils/                  Core utilities (no UI dependencies)
-│   ├── levenshtein.py      levenshtein · damerau_levenshtein · jaro_winkler
-│   │                       trademark_risk · deduplicate_by_distance
-│   ├── text_utils.py       soundex · metaphone · syllable_count · vowel_ratio
-│   │                       brand_variants · is_pronounceable · forbidden_sequence_*
-│   ├── validators.py       validate_brand_name · validate_domain_name
-│   └── dataset_loader.py   Lazy-cached dataset reads for all .txt files
-│
-├── config/
-│   ├── constants.py        All numeric thresholds · colour palette · enums
-│   └── settings.py         Settings dataclass · TOML persistence · env overrides
-│
-├── datasets/               Bundled text datasets (loaded at runtime)
-│   ├── synonyms.txt
-│   ├── common_words.txt
-│   ├── brand_blacklist.txt
-│   ├── prefixes.txt        62 domain prefixes
-│   ├── suffixes.txt        129 domain suffixes
-│   ├── tlds.txt            40 scored TLDs
-│   ├── tech_terms.txt
-│   ├── ai_terms.txt
-│   └── business_terms.txt
-│
-└── tests/
-    ├── test_generation.py  KeywordEngine · SynonymEngine · PatternEngine
-    │                       MutationEngine · NameGenerator · levenshtein utils
-    ├── test_scoring.py     BrandScorer · PhoneticAnalysis · CollisionDetection
-    │                       UniquenessScore · TrademarkRisk · BrandTier mapping
-    └── test_domains.py     DomainValidator · DomainRanker · DomainGenerator
-                            TLDStrategy · TLDTier · DomainChecker (mocked)
+├── nexagen/
+│   ├── analysis/
+│   │   ├── brand_score.py          # Composite scorer — 4-dimension weighted scoring
+│   │   ├── collision_detection.py  # Exact, fuzzy, phonetic, substring collision checks
+│   │   ├── phonetic_analysis.py    # 9-dimension phonetic profile
+│   │   └── uniqueness_score.py     # Blacklist distance and originality scoring
+│   ├── checks/
+│   │   ├── platform_dispatcher.py  # Unified platform check router
+│   │   ├── github_check.py         # GitHub user/org availability
+│   │   ├── pypi_check.py           # PyPI package availability
+│   │   ├── npm_check.py            # npm package availability
+│   │   └── docker_check.py         # Docker Hub availability
+│   ├── cli/
+│   │   ├── app.py                  # Entry point — CLI argument parsing
+│   │   ├── commands.py             # All command implementations
+│   │   ├── menu.py                 # Interactive menu loop
+│   │   └── help.py                 # Help text and usage strings
+│   ├── config/
+│   │   ├── constants.py            # All static constants — never changes at runtime
+│   │   └── settings.py             # Runtime settings with TOML persistence
+│   ├── datasets/
+│   │   ├── synonyms.txt            # Synonym graph
+│   │   ├── tech_terms.txt          # Tech vocabulary
+│   │   ├── ai_terms.txt            # AI/ML vocabulary
+│   │   ├── business_terms.txt      # Business vocabulary
+│   │   ├── common_words.txt        # Common word filter list
+│   │   ├── brand_blacklist.txt     # Trademark collision list
+│   │   ├── prefixes.txt            # Brand prefix list
+│   │   ├── suffixes.txt            # Brand suffix list
+│   │   └── tlds.txt                # Full TLD list with scores
+│   ├── domains/
+│   │   ├── domain_checker.py       # RDAP availability checking with body validation
+│   │   ├── domain_generator.py     # Domain variant generation (prefix/suffix/bare)
+│   │   ├── domain_ranker.py        # TLD scoring and portfolio recommendations
+│   │   └── tld_strategy.py         # TLD selection strategy by profile
+│   ├── engine/
+│   │   ├── keyword_engine.py       # Stage 1 — keyword normalisation and scoring
+│   │   ├── synonym_engine.py       # Stage 2 — synonym expansion and deduplication
+│   │   ├── pattern_engine.py       # Stage 3 — 10 macro-level pattern strategies
+│   │   ├── mutation_engine.py      # Stage 4 — 12 character-level mutation strategies
+│   │   └── name_generator.py       # Stage 5 — orchestrates pipeline, scores, ranks
+│   ├── export/
+│   │   ├── report_builder.py       # Report assembly and multi-format dispatch
+│   │   ├── json_export.py          # JSON export writer
+│   │   ├── csv_export.py           # CSV export writer
+│   │   └── markdown_export.py      # Markdown report writer
+│   ├── ui/
+│   │   ├── animations.py           # Rich-powered spinners, boot sequence, reveal
+│   │   ├── banner.py               # Section headers, logo, about screen
+│   │   ├── progress.py             # DomainCheckProgress, GenerationProgress
+│   │   ├── tables.py               # Results tables — names, domains, platforms
+│   │   └── theme.py                # Colour theme definitions
+│   └── utils/
+│       ├── dataset_loader.py       # Dataset file loading with caching
+│       ├── levenshtein.py          # Damerau-Levenshtein implementation
+│       ├── text_utils.py           # String helpers — blend, truncate, phonetic
+│       └── validators.py           # Input validation helpers
+├── tests/
+│   ├── test_generation.py          # Generation pipeline tests
+│   ├── test_scoring.py             # Brand scorer tests
+│   └── test_domains.py             # Domain checker tests
+├── docs/
+│   ├── architecture.md             # Layer diagram and design decisions
+│   └── usage.md                    # Extended usage guide
+├── assets/
+│   └── nexagen-logo.png
+├── pyproject.toml
+├── setup.cfg
+├── LICENSE
+└── README.md
 ```
 
 ---
@@ -553,53 +608,62 @@ nexagen/
 ## Running Tests
 
 ```bash
-# All tests
-python -m pytest tests/ -v
+# Install dev dependencies
+pip install -e ".[dev]"
 
-# Individual suites
-python -m pytest tests/test_generation.py -v
-python -m pytest tests/test_scoring.py -v
-python -m pytest tests/test_domains.py -v
+# Run all tests
+pytest
 
-# With unittest directly
-python -m unittest tests.test_generation -v
-python -m unittest tests.test_scoring -v
-python -m unittest tests.test_domains -v
+# Run with coverage report
+pytest --cov=nexagen --cov-report=term-missing
 
-# Quick smoke test — no external dependencies
-python -m pytest tests/ -v --tb=short -x
+# Run a specific module
+pytest tests/test_generation.py
+pytest tests/test_scoring.py
+pytest tests/test_domains.py
+
+# Run only fast tests (skip network checks)
+pytest -m "not network"
 ```
 
-Tests run entirely offline. All network calls in `test_domains.py` are patched via `unittest.mock` — no real RDAP or DNS requests are made.
+---
+
+## Module Stats
+
+| Module | Lines | Responsibility |
+|---|---|---|
+| `cli/commands.py` | ~1,330 | All command implementations |
+| `engine/pattern_engine.py` | ~750 | 10 pattern generation strategies |
+| `ui/banner.py` | ~730 | Logo, sections, about screen |
+| `ui/animations.py` | ~695 | Spinners, boot sequence, reveal |
+| `engine/mutation_engine.py` | ~680 | 12 mutation strategies |
+| `ui/progress.py` | ~650 | Progress bars and check trackers |
+| `domains/domain_checker.py` | ~654 | RDAP checks and cache |
+| `domains/tld_strategy.py` | ~717 | TLD strategy by profile |
+| `config/constants.py` | ~600 | All static constants |
+| `analysis/brand_score.py` | ~580 | 4-dimension composite scorer |
+| `engine/name_generator.py` | ~560 | Pipeline orchestration |
+| `domains/domain_generator.py` | ~551 | Domain variant generation |
+| `analysis/collision_detection.py` | ~540 | Collision signal detection |
+| `domains/domain_ranker.py` | ~541 | TLD scoring and ranking |
+| `ui/tables.py` | ~731 | Results table rendering |
 
 ---
 
 ## Credits
 
-**Developed by [CyberEmpireX](https://github.com/cyberempirex)**
+**NEXAGEN** is a project by [CyberEmpireX (CEX)](https://github.com/cyberempirex), part of the CEX ecosystem.
 
-CEX-Nexagen is part of the **CyberEmpireX (CEX)** ecosystem — a collection of practical cybersecurity and research tools built for professionals who prefer working from a terminal.
+- Community: [t.me/CyberEmpireXChat](https://t.me/CyberEmpireXChat)
+- Issues & feature requests: [github.com/cyberempirex/nexagen/issues](https://github.com/cyberempirex/nexagen/issues)
+- Documentation: [docs/usage.md](docs/usage.md)
 
-```
-Maintained by CyberEmpireX
-Tool     :  NEXAGEN v1.0.0
-Ecosystem:  CyberEmpireX (CEX)
-Repo     :  https://github.com/cyberempirex/nexagen
-Docs     :  https://github.com/cyberempirex/nexagen/wiki
-```
+NEXAGEN is provided as-is for research and creative use. Final responsibility for name selection, trademark clearance, and domain registration lies with the user.
 
 ---
 
 <div align="center">
 
-*NEXAGEN is provided as-is for research and creative use.*
-*Final responsibility for name selection rests with the user.*
-
-<br/>
-
-[![CEX](https://img.shields.io/badge/CEX--Nexagen-CyberEmpireX-6c5ce7?style=flat-square)](https://github.com/cyberempirex)
-[![Stars](https://img.shields.io/github/stars/cyberempirex/nexagen?style=flat-square&logo=github&color=f1c40f)](https://github.com/cyberempirex/nexagen/stargazers)
-
-**CEX-Nexagen · CyberEmpireX**
+*Built by [CyberEmpireX](https://github.com/cyberempirex) · MIT License · v1.0.0*
 
 </div>
