@@ -654,9 +654,15 @@ pytest -m "not network"
 
 **NEXAGEN** is a project by [CyberEmpireX (CEX)](https://github.com/cyberempirex), part of the CEX ecosystem.
 
-- Community: [t.me/CyberEmpireXChat](https://t.me/CyberEmpireXChat)
+- Community: [t.me/nexagen_community](https://t.me/nexagen_community)
 - Issues & feature requests: [github.com/cyberempirex/nexagen/issues](https://github.com/cyberempirex/nexagen/issues)
 - Documentation: [docs/usage.md](docs/usage.md)
+
+  [![Version](https://img.shields.io/badge/Version-v1.0.0-9b59b6?style=flat-square&logo=github)](https://github.com/cyberempirex/nexagen/releases)
+
+  [![Stars](https://img.shields.io/github/stars/cyberempirex/nexagen?style=flat-square&logo=github&color=f1c40f)](https://github.com/cyberempirex/nexagen/stargazers)
+
+  [![Issues](https://img.shields.io/github/issues/cyberempirex/nexagen?style=flat-square&logo=github)](https://github.com/cyberempirex/nexagen/issues)
 
 NEXAGEN is provided as-is for research and creative use. Final responsibility for name selection, trademark clearance, and domain registration lies with the user.
 
