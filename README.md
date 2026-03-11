@@ -664,7 +664,7 @@ pytest -m "not network"
 
   [![Issues](https://img.shields.io/github/issues/cyberempirex/nexagen?style=flat-square&logo=github)](https://github.com/cyberempirex/nexagen/issues)
 
-NEXAGEN is provided as-is for research and creative use. Final responsibility for name selection, trademark clearance, and domain registration lies with the user.
+NEXAGEN is provided as-is for research and creative use. Final responsibility for name selection, trademark clearance, and domain registration lies with the user..
 
 ---
 
