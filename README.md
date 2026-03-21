@@ -42,7 +42,7 @@
 
 ---
 
-## What Is This
+## What Is This?
 
 NEXAGEN is a command-line tool that generates and scores brand names for startups, products, platforms, and open-source projects. You give it a few keywords describing what you're building — it runs those through a five-stage linguistic pipeline and hands back ranked candidates with brand strength scores, trademark risk assessments, domain availability across 40+ TLDs, and handle checks on GitHub, PyPI, npm, Docker Hub, and Hugging Face.
 
